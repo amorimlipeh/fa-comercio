@@ -1,0 +1,26 @@
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  color: red;
+}
+
+.produto {
+  background: #1a1a1a;
+  margin: 20px;
+  padding: 20px;
+  border: 2px solid red;
+  border-radius: 10px;
+}
+
+button {
+  padding: 12px;
+  background: red;
+  color: white;
+  border: none;
+  font-weight: bold;
+}

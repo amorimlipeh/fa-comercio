@@ -3,24 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>FA COMÉRCIO</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>FA COMÉRCIO ONLINE</h1>
+<h1>💣 FA COMÉRCIO INTERNACIONAL</h1>
+<h2>📦 DIRETO DO IMPORTADOR</h2>
 
 <div id="produtos"></div>
 
-<script>
-fetch('/produtos')
-.then(r=>r.json())
-.then(p=>{
-  let html="";
-  p.forEach(x=>{
-    html+=`<p>${x.nome} - Caixa: ${x.caixa}</p>`;
-  });
-  document.getElementById('produtos').innerHTML=html;
-});
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
