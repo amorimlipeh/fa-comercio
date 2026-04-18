@@ -17,50 +17,43 @@ fetch('/produtos')
 
     function render() {
 
-      const precoCaixa = precoUnit * p.caixa * qtd;
+      const total = precoUnit * p.caixa * qtd;
       const revenda = precoUnit * 2;
-      const lucroTotal = (revenda - precoUnit) * p.caixa * qtd;
+      const lucro = (revenda - precoUnit) * p.caixa * qtd;
 
       return `
       <div class="produto">
         <h2>${p.nome}</h2>
 
-        <p>📦 Caixa com ${p.caixa} unidades</p>
-
-        <p>💰 Você paga: R$${precoUnit.toFixed(2)}</p>
-
-        <h3>💣 Total: R$${precoCaixa.toFixed(2)}</h3>
-
-        <p>🚀 Revenda sugerida: R$${revenda.toFixed(2)}</p>
-        <p>💸 Lucro estimado: R$${lucroTotal.toFixed(2)}</p>
-
-        <p>⚠️ ESTOQUE LIMITADO</p>
+        <p>📦 Caixa com ${p.caixa}</p>
+        <p>💣 Total: R$${total.toFixed(2)}</p>
+        <p>💸 Lucro: R$${lucro.toFixed(2)}</p>
 
         <div>
           <button onclick="menos('${p.nome}')">-</button>
-          <span id="qtd-${p.nome}">${qtd}</span>
+          ${qtd}
           <button onclick="mais('${p.nome}')">+</button>
         </div>
 
-        <button onclick="comprar('${p.nome}', ${precoCaixa}, ${qtd})">
-          COMPRAR AGORA
+        <button onclick="pedido('${p.nome}', ${total}, ${qtd})">
+          FINALIZAR PEDIDO
         </button>
       </div>`;
     }
 
-    container.innerHTML += `<div id="produto-${p.nome}">${render()}</div>`;
+    container.innerHTML += `<div id="p-${p.nome}">${render()}</div>`;
 
     window.mais = (nome) => {
       if (nome === p.nome) {
         qtd++;
-        document.getElementById("produto-" + p.nome).innerHTML = render();
+        document.getElementById("p-" + p.nome).innerHTML = render();
       }
     }
 
     window.menos = (nome) => {
       if (nome === p.nome && qtd > 1) {
         qtd--;
-        document.getElementById("produto-" + p.nome).innerHTML = render();
+        document.getElementById("p-" + p.nome).innerHTML = render();
       }
     }
 
@@ -68,8 +61,16 @@ fetch('/produtos')
 
 });
 
-function comprar(nome, preco, qtd) {
-  const msg = `🔥 Quero comprar ${qtd} caixa(s) de ${nome}  
-💰 Total: R$${preco}`;
-  window.open(`https://wa.me/5521SEUNUMERO?text=${encodeURIComponent(msg)}`);
+function pedido(nome, total, qtd) {
+  fetch('/pedido', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nome, total, qtd })
+  })
+  .then(res => res.json())
+  .then(p => {
+    alert('Pedido #' + p.id + ' criado com sucesso!');
+  });
 }
