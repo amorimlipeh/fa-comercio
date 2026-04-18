@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Painel</title>
+<style>
+body { background:#111; color:white; font-family:Arial; text-align:center; }
+.card { border:1px solid red; margin:20px; padding:20px; }
+</style>
+</head>
+<body>
+
+<h1>📦 PEDIDOS RECEBIDOS</h1>
+
+<div id="pedidos"></div>
+
+<script>
+fetch('/pedidos')
+.then(r=>r.json())
+.then(lista=>{
+
+  let html = "";
+
+  lista.reverse().forEach(p=>{
+    html += `
+    <div class="card">
+      <h2>Pedido #${p.id}</h2>
+      <p>Produto: ${p.nome}</p>
+      <p>Qtd: ${p.qtd}</p>
+      <p>Total: R$${p.total}</p>
+    </div>
+    `;
+  });
+
+  document.getElementById("pedidos").innerHTML = html;
+
+});
+</script>
+
+</body>
+</html>

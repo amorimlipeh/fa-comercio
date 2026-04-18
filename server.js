@@ -12,6 +12,11 @@ app.get('/produtos', (req, res) => {
   res.json(produtos);
 });
 
+app.get('/pedidos', (req, res) => {
+  const pedidos = JSON.parse(fs.readFileSync('./data/pedidos.json'));
+  res.json(pedidos);
+});
+
 app.post('/pedido', (req, res) => {
   const pedidos = JSON.parse(fs.readFileSync('./data/pedidos.json', 'utf8') || '[]');
 
@@ -28,5 +33,5 @@ app.post('/pedido', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('🔥 SISTEMA ONLINE NA PORTA ' + PORT);
+  console.log('🔥 SISTEMA ONLINE');
 });
