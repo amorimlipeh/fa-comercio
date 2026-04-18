@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const QRCode = require('qrcode');
 
 const PORT = process.env.PORT || 3000;
 
@@ -17,11 +18,13 @@ app.get('/pedidos', (req, res) => {
   res.json(pedidos);
 });
 
-app.post('/pedido', (req, res) => {
+app.post('/pedido', async (req, res) => {
+
   const pedidos = JSON.parse(fs.readFileSync('./data/pedidos.json', 'utf8') || '[]');
 
   const novo = {
     id: Date.now(),
+    status: "aguardando",
     ...req.body
   };
 
@@ -29,9 +32,14 @@ app.post('/pedido', (req, res) => {
 
   fs.writeFileSync('./data/pedidos.json', JSON.stringify(pedidos, null, 2));
 
-  res.json(novo);
+  const chavePix = "21993038280";
+
+  const qr = await QRCode.toDataURL(chavePix);
+
+  res.json({ ...novo, qr });
+
 });
 
 app.listen(PORT, () => {
-  console.log('🔥 SISTEMA ONLINE');
+  console.log('🔥 SISTEMA PRO ONLINE');
 });
