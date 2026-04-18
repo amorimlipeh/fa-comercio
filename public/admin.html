@@ -2,19 +2,51 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Painel</title>
+<title>Painel Profissional</title>
+
 <style>
-body { background:#111; color:white; font-family:Arial; text-align:center; }
-.card { border:1px solid red; margin:20px; padding:20px; }
+body {
+  background:#111;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
+
+.card {
+  margin:20px;
+  padding:20px;
+  border-radius:10px;
+}
+
+.pago {
+  border:2px solid green;
+}
+
+.aguardando {
+  border:2px solid red;
+}
+
+button {
+  padding:10px;
+  margin-top:10px;
+  background:red;
+  color:white;
+  border:none;
+}
 </style>
+
 </head>
 <body>
 
-<h1>📦 PEDIDOS RECEBIDOS</h1>
+<h1>📦 PAINEL DE PEDIDOS</h1>
 
-<div id="pedidos"></div>
+<button onclick="carregar()">ATUALIZAR</button>
+
+<div id="lista"></div>
 
 <script>
+function carregar() {
+
 fetch('/pedidos')
 .then(r=>r.json())
 .then(lista=>{
@@ -22,19 +54,29 @@ fetch('/pedidos')
   let html = "";
 
   lista.reverse().forEach(p=>{
+
     html += `
-    <div class="card">
+    <div class="card ${p.status}">
       <h2>Pedido #${p.id}</h2>
+
       <p>Produto: ${p.nome}</p>
       <p>Qtd: ${p.qtd}</p>
       <p>Total: R$${p.total}</p>
+
+      <p>Status: ${p.status}</p>
+
+      ${p.status === "pago" ? "<button>SEPARAR PEDIDO</button>" : ""}
+
     </div>
     `;
   });
 
-  document.getElementById("pedidos").innerHTML = html;
+  document.getElementById("lista").innerHTML = html;
 
 });
+}
+
+carregar();
 </script>
 
 </body>
