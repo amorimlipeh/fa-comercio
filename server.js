@@ -40,6 +40,22 @@ app.post('/pedido', async (req, res) => {
 
 });
 
+app.post('/pago/:id', (req, res) => {
+
+  const pedidos = JSON.parse(fs.readFileSync('./data/pedidos.json'));
+
+  const atualizado = pedidos.map(p => {
+    if (p.id == req.params.id) {
+      p.status = "pago";
+    }
+    return p;
+  });
+
+  fs.writeFileSync('./data/pedidos.json', JSON.stringify(atualizado, null, 2));
+
+  res.json({ ok: true });
+});
+
 app.listen(PORT, () => {
-  console.log('🔥 SISTEMA PRO ONLINE');
+  console.log('🔥 SISTEMA MASTER ONLINE');
 });

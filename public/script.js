@@ -22,9 +22,7 @@ fetch('/produtos')
       return `
       <div class="produto">
         <h2>${p.nome}</h2>
-
-        <p>📦 Caixa com ${p.caixa}</p>
-        <p>💣 Total: R$${total.toFixed(2)}</p>
+        <p>Total: R$${total.toFixed(2)}</p>
 
         <div>
           <button onclick="menos('${p.nome}')">-</button>
@@ -61,9 +59,7 @@ fetch('/produtos')
 function pedido(nome, total, qtd) {
   fetch('/pedido', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ nome, total, qtd })
   })
   .then(res => res.json())
@@ -77,9 +73,21 @@ function pedido(nome, total, qtd) {
         <h3>📲 Pague via PIX</h3>
         <img src="${p.qr}" width="250"/>
 
-        <p>Status: AGUARDANDO PAGAMENTO</p>
+        <p>Status: AGUARDANDO</p>
+
+        <button onclick="confirmar(${p.id})">
+          JÁ PAGUEI
+        </button>
       </div>
     `;
 
+  });
+}
+
+function confirmar(id) {
+  fetch('/pago/' + id, { method: 'POST' })
+  .then(() => {
+    alert('Pagamento confirmado!');
+    location.reload();
   });
 }
