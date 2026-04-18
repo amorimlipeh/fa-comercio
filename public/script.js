@@ -77,7 +77,7 @@ function pedido(nome, total, qtd) {
 💰 Total: R$${total}
 
 📲 Pague via PIX:
-SUA_CHAVE_PIX_AQUI`
+21993038280`
     );
 
   });
