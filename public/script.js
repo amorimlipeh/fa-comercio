@@ -18,8 +18,7 @@ fetch('/produtos')
     function render() {
 
       const total = precoUnit * p.caixa * qtd;
-      const revenda = precoUnit * 2;
-      const lucro = (revenda - precoUnit) * p.caixa * qtd;
+      const lucro = (precoUnit * qtd * p.caixa);
 
       return `
       <div class="produto">
@@ -27,7 +26,7 @@ fetch('/produtos')
 
         <p>📦 Caixa com ${p.caixa}</p>
         <p>💣 Total: R$${total.toFixed(2)}</p>
-        <p>💸 Lucro: R$${lucro.toFixed(2)}</p>
+        <p>💸 Lucro estimado: R$${lucro.toFixed(2)}</p>
 
         <div>
           <button onclick="menos('${p.nome}')">-</button>
@@ -71,6 +70,15 @@ function pedido(nome, total, qtd) {
   })
   .then(res => res.json())
   .then(p => {
-    alert('Pedido #' + p.id + ' criado com sucesso!');
+
+    alert(
+`Pedido #${p.id} criado!
+
+💰 Total: R$${total}
+
+📲 Pague via PIX:
+SUA_CHAVE_PIX_AQUI`
+    );
+
   });
 }
