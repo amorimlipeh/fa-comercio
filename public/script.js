@@ -8,21 +8,13 @@ fetch('/produtos')
 
     let qtd = 1;
 
-    let lucroUnit = 1.2;
-    if (p.custo > 10) {
-      lucroUnit = p.custo * 0.3;
-    }
-
-    const precoUnit = p.custo + lucroUnit;
-
     function render() {
-
-      const total = precoUnit * p.caixa * qtd;
 
       return `
       <div class="produto">
         <h2>${p.nome}</h2>
-        <p>Total: R$${total.toFixed(2)}</p>
+
+        <p>📦 Estoque: ${p.estoque} caixas</p>
 
         <div>
           <button onclick="menos('${p.nome}')">-</button>
@@ -30,8 +22,8 @@ fetch('/produtos')
           <button onclick="mais('${p.nome}')">+</button>
         </div>
 
-        <button onclick="pedido('${p.nome}', ${total}, ${qtd})">
-          PAGAR AGORA
+        <button onclick="pedido('${p.nome}', ${qtd})">
+          FINALIZAR PEDIDO
         </button>
       </div>`;
     }
@@ -56,38 +48,24 @@ fetch('/produtos')
 
 });
 
-function pedido(nome, total, qtd) {
+function pedido(nome, qtd) {
   fetch('/pedido', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, total, qtd })
+    body: JSON.stringify({ nome, qtd })
   })
   .then(res => res.json())
   .then(p => {
 
+    if (p.erro) {
+      alert("❌ Sem estoque");
+      return;
+    }
+
     document.body.innerHTML = `
-      <div style="text-align:center; color:white; background:#111; padding:20px;">
-        <h2>Pedido #${p.id}</h2>
-        <p>Total: R$${total}</p>
-
-        <h3>📲 Pague via PIX</h3>
-        <img src="${p.qr}" width="250"/>
-
-        <p>Status: AGUARDANDO</p>
-
-        <button onclick="confirmar(${p.id})">
-          JÁ PAGUEI
-        </button>
-      </div>
+      <h2>Pedido criado</h2>
+      <p>ID: ${p.id}</p>
+      <img src="${p.qr}" width="250"/>
     `;
-
-  });
-}
-
-function confirmar(id) {
-  fetch('/pago/' + id, { method: 'POST' })
-  .then(() => {
-    alert('Pagamento confirmado!');
-    location.reload();
   });
 }
