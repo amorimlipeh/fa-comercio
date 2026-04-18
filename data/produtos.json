@@ -1,0 +1,5 @@
+[
+  { "nome": "Forma de Gelo", "custo": 1.80, "caixa": 200 },
+  { "nome": "Mini Mixer", "custo": 2.20, "caixa": 300 },
+  { "nome": "Mop Spray", "custo": 15.00, "caixa": 20 }
+]
